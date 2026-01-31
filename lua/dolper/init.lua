@@ -45,10 +45,10 @@ function M.setup(opts)
     local custom_handlers = nil
     if opts ~= nil then
         if opts['hex_handler'] ~= nil then
-            hex_handler = opts['hex_handler']
+            hex_handler = opts['hex_handler'][1]
         end
         if opts['dec_handler'] ~= nil then
-            dec_handler = opts['dec_handler']
+            dec_handler = opts['dec_handler'][1]
         end
         if opts['custom_handlers'] ~= nil and type(opts['custom_handlers']) == 'table' then
             custom_handlers = opts['custom_handlers']
