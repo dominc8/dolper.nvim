@@ -118,9 +118,9 @@ function M.popup(is_visual)
         relative = 'cursor',
         width = width,
         height = height,
-        col = 0,
-        row = 0,
-        anchor = 'SW',
+        col = 1,
+        row = 1,
+        anchor = 'NW',
         style = 'minimal',
         border = { '+', '-', '+', '|', '+', '-', '+', '|' },
     }
