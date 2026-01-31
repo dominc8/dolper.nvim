@@ -23,7 +23,12 @@ local function parse_hex(input)
 end
 
 function parsers.default_hex_handler(input)
-    local i, j = string.find(input, "%x+")
+    local i, j = string.find(input, "0x%x+")
+    if i ~= nil and j ~= nil then
+        local s = string.sub(input, i+2, j)
+        return "0x" .. parse_hex(s)
+    end
+    i, j = string.find(input, "%x+")
     if i ~= nil and j ~= nil then
         local s = string.sub(input, i, j)
         return parse_hex(s)
@@ -37,6 +42,8 @@ local function parse_dec(input)
     local x = tonumber(input)
     local arr_u8_s = "as_u8[]="
     local prefix_s = "{"
+
+    if x == 0 then return nil end
 
     while x > 0 do
         local b = x % 256
