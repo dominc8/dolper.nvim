@@ -1,4 +1,13 @@
 local parsers = {}
+local double_int_limit = 9007199254740992
+
+local function num_to_str(num)
+    if num >= double_int_limit then
+        return string.format("~%.0f", num)
+    else
+        return string.format("%.0f", num)
+    end
+end
 
 local function parse_hex(input)
     local reversed_endianess_input = ""
@@ -18,7 +27,8 @@ local function parse_hex(input)
         prefix_s = ", "
         i = i + 2
     end
-    local output = input .. " parsed as hex={" .. tonumber(input, 16) .. "(" .. tonumber(reversed_endianess_input, 16) .. ")," .. arr_u8_s .. "}}"
+
+    local output = input .. " parsed as hex={" .. num_to_str(tonumber(input, 16)) .. "(" .. num_to_str(tonumber(reversed_endianess_input, 16)) .. ")," .. arr_u8_s .. "}}"
     return output
 end
 
@@ -42,8 +52,13 @@ local function parse_dec(input)
     local x = tonumber(input)
     local arr_u8_s = "as_u8[]="
     local prefix_s = "{"
+    local precision_prefix = ""
 
     if x == 0 then return nil end
+
+    if x_orig >= double_int_limit then
+        precision_prefix = "~"
+    end
 
     while x > 0 do
         local b = x % 256
@@ -52,7 +67,7 @@ local function parse_dec(input)
         arr_u8_s = arr_u8_s .. prefix_s .. b
         prefix_s = ", "
     end
-    local output = input .. " parsed as dec={" .. string.format("0x%X", x_orig) .. "(" .. x_reversed_endianess .. ")," .. arr_u8_s .. "}}"
+    local output = input .. " parsed as dec={" .. string.format("%s0x%X", precision_prefix, x_orig) .. "(" .. num_to_str(x_reversed_endianess) .. ")," .. arr_u8_s .. "}}"
     return output
 end
 
